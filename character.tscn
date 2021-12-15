@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://penguin.glb" type="PackedScene" id=1]
+
+[sub_resource type="Animation" id=1]
+resource_name = "walk"
+length = 0.8
+loop = true
+tracks/0/type = "transform"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0.001, 1, 0, 0, 0, 0, 0.707107, 0, 0.707107, 1, 1, 1, 0.2, 1, 0, 0, 0, 0.0922959, 0.701057, -0.0922959, 0.701057, 1, 1, 1, 0.6, 1, 0, 0, 0, -0.0922959, 0.701057, 0.0922959, 0.701057, 1, 1, 1 )
+
+[node name="penguin" instance=ExtResource( 1 )]
+transform = Transform( 0, 0.243955, 0.969787, -1.49012e-08, 0.969786, -0.243955, -1, 1.49012e-08, 0, 0, 0, 0 )
+
+[node name="Cube001" parent="." index="2"]
+transform = Transform( 0.445454, 0, -0.108208, 0, 0.054981, 0, 0.195762, 0, 0.246225, 0.581559, -2.25278, 0.574332 )
+
+[node name="Cone" parent="." index="3"]
+transform = Transform( 1.99961e-08, 0.38203, 0, -0.264856, 2.88425e-08, 0, 0, 0, 0.264856, 1.24394, 2.58584, 5.96046e-08 )
+
+[node name="Cube002" parent="." index="4"]
+transform = Transform( 0.445454, 0, 0.108208, 0, 0.054981, 0, -0.195762, 0, 0.246225, 0.581559, -2.25278, -0.574332 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="5"]
+anims/walk = SubResource( 1 )

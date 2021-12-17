@@ -14,12 +14,26 @@ const MAX_SLOPE_ANGLE = 40
 
 const ANIMATION_SCALE = 3
 
+const TURN_SPEED = 10
+
 func _physics_process(delta):
-	process_input()
+	process_input(delta)
 	process_movement(delta)
+	# process_push()
+	process_grab()
 	process_animation()
 
-func process_input():
+func process_grab():
+	if Input.is_action_pressed("action_grab") && $ConeTwistJoint.get_node_b().is_empty():
+		var bodies = $Hands.get_overlapping_bodies()
+		if bodies.size() == 0:
+			return
+		$ConeTwistJoint.set_node_b(bodies[0].get_path())
+	elif Input.is_action_just_released("action_grab"):
+		$ConeTwistJoint.set_node_b(NodePath(""))
+		
+
+func process_input(delta):
 
 	# ----------------------------------
 	# Walking
@@ -38,7 +52,8 @@ func process_input():
 
 	input_movement_vector = input_movement_vector.normalized()
 	if input_movement_vector.length() > 0:
-		look_at(global_transform.origin + input_movement_vector, Vector3.UP)
+		var new_transform = transform.looking_at(global_transform.origin + input_movement_vector, Vector3.UP)
+		transform = transform.interpolate_with(new_transform, TURN_SPEED * delta)
 
 	# Basis vectors are already normalized.
 	dir += input_movement_vector
@@ -70,7 +85,7 @@ func process_movement(delta):
 		hvel = hvel.linear_interpolate(Vector3.ZERO, AIR_DEACCEL * delta)
 		vel.x = hvel.x
 		vel.z = hvel.z
-		vel = move_and_slide(vel, Vector3.UP, 0.05, 4, deg2rad(MAX_SLOPE_ANGLE), false)
+		vel = move_and_slide(vel, Vector3.UP, 0.05, 4, deg2rad(MAX_SLOPE_ANGLE), true)
 		return
 
 	dir.y = 0
@@ -88,7 +103,13 @@ func process_movement(delta):
 	hvel = hvel.linear_interpolate(target, accel * delta)
 	vel.x = hvel.x
 	vel.z = hvel.z
-	vel = move_and_slide(vel, Vector3.UP, 0.05, 4, deg2rad(MAX_SLOPE_ANGLE), false)
+	vel = move_and_slide(vel, Vector3.UP, 0.05, 4, deg2rad(MAX_SLOPE_ANGLE), true)
+
+func process_push():
+	if !is_on_wall():
+		return
+	var collision = get_slide_collision(0)
+	print(collision.get_normal())
 
 func process_animation():
 	if dir.length() > 0:

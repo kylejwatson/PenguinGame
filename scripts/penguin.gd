@@ -1,122 +1,89 @@
-extends KinematicBody
+extends RigidBody
 
-const GRAVITY = -100
-var vel = Vector3()
 const MAX_SPEED = 30
-const JUMP_SPEED = 40
-const ACCEL = 4.5
+const JUMP_SPEED = 800
+const ACCEL = 50
 
 var dir = Vector3()
 
-const DEACCEL= 2.5
-const AIR_DEACCEL = 0.1
-const MAX_SLOPE_ANGLE = 40
-
 const ANIMATION_SCALE = 3
 
-const TURN_SPEED = 10
+const TURN_SCALE = 10
 
 func _physics_process(delta):
 	process_input(delta)
 	process_movement(delta)
-	# process_push()
 	process_grab()
 	process_animation()
+
 
 func process_grab():
 	if Input.is_action_pressed("action_grab") && $ConeTwistJoint.get_node_b().is_empty():
 		var bodies = $Hands.get_overlapping_bodies()
 		if bodies.size() == 0:
 			return
+		$ConeTwistJoint.set_node_a(get_path())
 		$ConeTwistJoint.set_node_b(bodies[0].get_path())
 	elif Input.is_action_just_released("action_grab"):
+		$ConeTwistJoint.set_node_a(NodePath(""))
 		$ConeTwistJoint.set_node_b(NodePath(""))
+
 		
+func look_follow(state, current_transform, target_dir):
+	var cur_dir = current_transform.basis.xform(Vector3(0, 0, 1))
+	var rotation_angle = signed_angle_to(cur_dir, target_dir, Vector3.UP)
 
-func process_input(delta):
+	state.set_angular_velocity( Vector3.UP * (rotation_angle / state.get_step()) / TURN_SCALE)
 
-	# ----------------------------------
-	# Walking
+func signed_angle_to(vec_from, vec_to, axis):
+	var cross_to = vec_from.cross(vec_to);
+	var unsigned_angle = atan2(cross_to.length(), vec_from.dot(vec_to))
+	var sign_to = cross_to.dot(axis)
+
+	return  -unsigned_angle if (sign_to < 0) else unsigned_angle
+
+func _integrate_forces(state):
+	look_follow(state, get_global_transform(), dir)
+
+func process_input(_delta):
 	dir = Vector3()
 
-	var input_movement_vector = Vector3()
-
 	if Input.is_action_pressed("movement_forward"):
-		input_movement_vector.z -= 1
+		dir.z -= 1
 	if Input.is_action_pressed("movement_backward"):
-		input_movement_vector.z += 1
+		dir.z += 1
 	if Input.is_action_pressed("movement_left"):
-		input_movement_vector.x -= 1
+		dir.x -= 1
 	if Input.is_action_pressed("movement_right"):
-		input_movement_vector.x += 1
+		dir.x += 1
 
-	input_movement_vector = input_movement_vector.normalized()
-	if input_movement_vector.length() > 0:
-		var new_transform = transform.looking_at(global_transform.origin + input_movement_vector, Vector3.UP)
-		transform = transform.interpolate_with(new_transform, TURN_SPEED * delta)
-
-	# Basis vectors are already normalized.
-	dir += input_movement_vector
-	# ----------------------------------
-
-	# ----------------------------------
-	# Jumping
-	if is_on_floor():
-		if Input.is_action_just_pressed("movement_jump"):
-			vel.y = JUMP_SPEED
-	# ----------------------------------
-
-	# ----------------------------------
-	# Capturing/Freeing the cursor
+	dir = dir.normalized()
+		
+	if is_on_floor() && Input.is_action_just_pressed("movement_jump"):
+			add_central_force (Vector3.UP * JUMP_SPEED)
+			
 	if Input.is_action_just_pressed("ui_cancel"):
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	# ----------------------------------
 
-func process_movement(delta):
-	vel.y += delta * GRAVITY
-	
-	var hvel = vel
-	hvel.y = 0
+func is_on_floor():
+	return $RayCast.is_colliding()
 
+func process_movement(_delta):
 	if !is_on_floor():
-		hvel = hvel.linear_interpolate(Vector3.ZERO, AIR_DEACCEL * delta)
-		vel.x = hvel.x
-		vel.z = hvel.z
-		vel = move_and_slide(vel, Vector3.UP, 0.05, 4, deg2rad(MAX_SLOPE_ANGLE), true)
 		return
 
-	dir.y = 0
-	dir = dir.normalized()
-
-	var target = dir
-	target *= MAX_SPEED
-
-	var accel
-	if dir.dot(hvel) > 0:
-		accel = ACCEL
-	else:
-		accel = DEACCEL
-
-	hvel = hvel.linear_interpolate(target, accel * delta)
-	vel.x = hvel.x
-	vel.z = hvel.z
-	vel = move_and_slide(vel, Vector3.UP, 0.05, 4, deg2rad(MAX_SLOPE_ANGLE), true)
-
-func process_push():
-	if !is_on_wall():
-		return
-	var collision = get_slide_collision(0)
-	print(collision.get_normal())
+	if get_linear_velocity().length() < MAX_SPEED:
+		add_central_force (dir * ACCEL)
 
 func process_animation():
 	if dir.length() > 0:
-		$penguin/AnimationPlayer.play("walk")
+		$penguin_rotator/penguin/AnimationPlayer.play("walk")
 	else:
-		$penguin/AnimationPlayer.stop()
+		$penguin_rotator/penguin/AnimationPlayer.stop()
 
-	var hvel = vel
+	var hvel = get_linear_velocity()
 	hvel.y = 0
-	$penguin/AnimationPlayer.set_speed_scale((ANIMATION_SCALE * hvel.length() / MAX_SPEED) + 1)
+	$penguin_rotator/penguin/AnimationPlayer.set_speed_scale((ANIMATION_SCALE * hvel.length() / MAX_SPEED) + 1)

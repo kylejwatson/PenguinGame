@@ -12,8 +12,8 @@ size = Vector2( 100, 100 )
 [sub_resource type="CapsuleShape" id=3]
 height = 4.17019
 
-[sub_resource type="BoxShape" id=7]
-extents = Vector3( 1.5, 3, 0.56536 )
+[sub_resource type="BoxShape" id=4]
+extents = Vector3( 0.453354, 3, 0.911053 )
 
 [sub_resource type="BoxShape" id=5]
 
@@ -29,6 +29,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 shape = SubResource( 1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0195274, 9.53674e-07, 0.0930901 )
 mesh = SubResource( 2 )
 material/0 = null
 
@@ -42,37 +43,49 @@ light_color = Color( 0.654902, 0.937255, 1, 1 )
 light_energy = 0.31
 shadow_enabled = true
 
-[node name="KinematicBody" type="KinematicBody" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0 )
+[node name="Player" type="RigidBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17.6111, -28.9583 )
+gravity_scale = 2.0
+axis_lock_angular_x = true
+axis_lock_angular_z = true
 script = ExtResource( 2 )
 
-[node name="CollisionShape" type="CollisionShape" parent="KinematicBody"]
+[node name="CollisionShape" type="CollisionShape" parent="Player"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.808599, 0 )
 shape = SubResource( 3 )
 
-[node name="penguin" parent="KinematicBody" instance=ExtResource( 1 )]
+[node name="penguin_rotator" type="Spatial" parent="Player"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 0.999999, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
 
-[node name="ConeTwistJoint" type="ConeTwistJoint" parent="KinematicBody"]
+[node name="penguin" parent="Player/penguin_rotator" instance=ExtResource( 1 )]
+transform = Transform( 1, 0, -2.22045e-16, 0, 1, 0, 0, 5.41692e-17, 1, 0, 0, 0 )
+
+[node name="ConeTwistJoint" type="ConeTwistJoint" parent="Player"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.659136, -1.58183 )
-nodes/node_a = NodePath("..")
 collision/exclude_nodes = false
+swing_span = 3.6
+twist_span = 45.0
 
-[node name="Hands" type="Area" parent="KinematicBody"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.659136, -1.58183 )
+[node name="Hands" type="Area" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2704, 0, 0 )
 gravity_point = true
 gravity_vec = Vector3( 0, 0, 0 )
 gravity = 100.0
 collision_layer = 0
 collision_mask = 2
 
-[node name="CollisionShape" type="CollisionShape" parent="KinematicBody/Hands"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.23421 )
-shape = SubResource( 7 )
+[node name="CollisionShape" type="CollisionShape" parent="Player/Hands"]
+shape = SubResource( 4 )
+
+[node name="RayCast" type="RayCast" parent="Player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.49257, 0 )
+enabled = true
 
 [node name="RigidBody" type="RigidBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.39019, -3.06794 )
 collision_layer = 3
-mass = 10.2041
+mass = 0.5
+gravity_scale = 2.0
 
 [node name="CollisionShape" type="CollisionShape" parent="RigidBody"]
 shape = SubResource( 5 )

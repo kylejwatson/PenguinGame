@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://character.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/penguin.gd" type="Script" id=2]
+[ext_resource path="res://scripts/game.gd" type="Script" id=3]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 50, 1, 50 )
@@ -19,7 +20,20 @@ extents = Vector3( 0.453354, 3, 0.911053 )
 
 [sub_resource type="CubeMesh" id=6]
 
+[sub_resource type="BoxShape" id=7]
+extents = Vector3( 10, 5, 10 )
+
+[sub_resource type="SpatialMaterial" id=9]
+flags_transparent = true
+vertex_color_use_as_albedo = true
+albedo_color = Color( 0.137255, 0.658824, 0, 0.294118 )
+
+[sub_resource type="CubeMesh" id=8]
+material = SubResource( 9 )
+size = Vector3( 20, 10, 20 )
+
 [node name="Spatial" type="Spatial"]
+script = ExtResource( 3 )
 
 [node name="StaticBody" type="StaticBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.834267, -0.625982, -0.387516 )
@@ -81,7 +95,9 @@ shape = SubResource( 4 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.49257, 0 )
 enabled = true
 
-[node name="RigidBody" type="RigidBody" parent="."]
+[node name="RigidBody" type="RigidBody" parent="." groups=[
+"Reward",
+]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.39019, -3.06794 )
 collision_layer = 3
 mass = 0.5
@@ -93,3 +109,47 @@ shape = SubResource( 5 )
 [node name="MeshInstance" type="MeshInstance" parent="RigidBody"]
 mesh = SubResource( 6 )
 material/0 = null
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = 10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+margin_right = 1004.0
+margin_bottom = 14.0
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer"]
+margin_right = 949.0
+margin_bottom = 14.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer"]
+margin_left = 953.0
+margin_right = 992.0
+margin_bottom = 14.0
+text = "Score:"
+align = 2
+
+[node name="ScoreNumber" type="Label" parent="MarginContainer/HBoxContainer"]
+margin_left = 996.0
+margin_right = 1004.0
+margin_bottom = 14.0
+text = "0"
+
+[node name="Goal" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.34322, 33.8697 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Goal"]
+shape = SubResource( 7 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Goal"]
+mesh = SubResource( 8 )
+material/0 = null
+
+[connection signal="body_entered" from="Goal" to="." method="_on_Goal_body_entered"]

@@ -10,6 +10,8 @@ const ANIMATION_SCALE = 3
 
 const TURN_SCALE = 10
 
+onready var camera = get_viewport().get_camera()
+
 func _physics_process(delta):
 	process_input(delta)
 	process_movement(delta)
@@ -49,14 +51,18 @@ func process_input(_delta):
 	dir = Vector3()
 
 	if Input.is_action_pressed("movement_forward"):
-		dir = -get_viewport().get_camera().global_transform.basis.z
+		dir.z -= 1
 	if Input.is_action_pressed("movement_backward"):
-		dir = get_viewport().get_camera().global_transform.basis.z
+		dir.z += 1
 	if Input.is_action_pressed("movement_left"):
-		dir = -get_viewport().get_camera().global_transform.basis.x
+		dir.x -= 1
 	if Input.is_action_pressed("movement_right"):
-		dir = get_viewport().get_camera().global_transform.basis.x
+		dir.x += 1
 
+	dir = dir.normalized()
+
+	dir = camera.global_transform.basis.xform(dir)
+	dir.y = 0
 	dir = dir.normalized()
 		
 	if is_on_floor() && Input.is_action_just_pressed("movement_jump"):

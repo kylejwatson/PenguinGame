@@ -12,17 +12,17 @@ var pitch : float = 0.0
 var origin : Vector3 = Vector3()
 var dist : float = 20.0
 
+onready var player =  get_node("/root/Spatial/Player")
+
 func _ready():
 	yaw = -1.5
 	pitch = -1.0
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
-func _process(delta):
-	var player =  get_node("/root/Spatial/Player")
-	if player:
-		origin = player.global_transform.origin
-		self.set_translation(origin - dist * self.project_ray_normal(get_viewport().get_visible_rect().size * 0.5))
+func _process(_delta):
+	origin = player.global_transform.origin
+	self.set_translation(origin - dist * self.project_ray_normal(get_viewport().get_visible_rect().size * 0.5))
 	
 func _input(event):
 	if Input.is_action_just_pressed("ui_cancel"):

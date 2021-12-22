@@ -49,24 +49,18 @@ func process_input(_delta):
 	dir = Vector3()
 
 	if Input.is_action_pressed("movement_forward"):
-		dir.z -= 1
+		dir = -get_viewport().get_camera().global_transform.basis.z
 	if Input.is_action_pressed("movement_backward"):
-		dir.z += 1
+		dir = get_viewport().get_camera().global_transform.basis.z
 	if Input.is_action_pressed("movement_left"):
-		dir.x -= 1
+		dir = -get_viewport().get_camera().global_transform.basis.x
 	if Input.is_action_pressed("movement_right"):
-		dir.x += 1
+		dir = get_viewport().get_camera().global_transform.basis.x
 
 	dir = dir.normalized()
 		
 	if is_on_floor() && Input.is_action_just_pressed("movement_jump"):
-			add_central_force (Vector3.UP * JUMP_SPEED)
-			
-	if Input.is_action_just_pressed("ui_cancel"):
-		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		else:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		add_central_force (Vector3.UP * JUMP_SPEED)
 
 func is_on_floor():
 	return $RayCast.is_colliding()
@@ -77,7 +71,7 @@ func process_movement(_delta):
 
 	if get_linear_velocity().length() < MAX_SPEED:
 		add_central_force (dir * ACCEL)
-
+		
 func process_animation():
 	if dir.length() > 0:
 		$penguin_rotator/penguin/AnimationPlayer.play("walk")

@@ -3,6 +3,7 @@ extends RigidBody
 const MAX_SPEED = 30
 const JUMP_SPEED = 800
 const ACCEL = 50
+const AIR_ACCEL = 10
 
 var dir = Vector3()
 
@@ -21,6 +22,7 @@ func _physics_process(delta):
 
 func process_grab():
 	if Input.is_action_pressed("action_grab") && $ConeTwistJoint.get_node_b().is_empty():
+		
 		var bodies = $Hands.get_overlapping_bodies()
 		if bodies.size() == 0:
 			return
@@ -72,11 +74,11 @@ func is_on_floor():
 	return $RayCast.is_colliding()
 
 func process_movement(_delta):
-	if !is_on_floor():
-		return
-
 	if get_linear_velocity().length() < MAX_SPEED:
-		add_central_force (dir * ACCEL)
+		if is_on_floor():
+			add_central_force (dir * ACCEL)
+		else:
+			add_central_force (dir * AIR_ACCEL)
 		
 func process_animation():
 	if dir.length() > 0:

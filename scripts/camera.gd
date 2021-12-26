@@ -12,7 +12,7 @@ var pitch : float = 0.0
 var origin : Vector3 = Vector3()
 var dist : float = 20.0
 
-onready var player =  get_node("/root/Spatial/Player")
+onready var player = get_node("/root/Spatial/Player")
 
 func _ready():
 	yaw = -1.5

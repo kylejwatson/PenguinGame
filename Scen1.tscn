@@ -1,24 +1,28 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://character.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scripts/penguin.gd" type="Script" id=2]
 [ext_resource path="res://scripts/game.gd" type="Script" id=3]
 [ext_resource path="res://scripts/camera.gd" type="Script" id=4]
 [ext_resource path="res://death_area.gd" type="Script" id=5]
+[ext_resource path="res://guitar.glb" type="PackedScene" id=6]
+[ext_resource path="res://phone.glb" type="PackedScene" id=7]
 
-[sub_resource type="CapsuleShape" id=3]
+[sub_resource type="CapsuleShape" id=1]
 height = 4.17019
 
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 0.680706, 3, 1.10639 )
+
+[sub_resource type="BoxShape" id=3]
+extents = Vector3( 0.90599, 3.26298, 1 )
+
 [sub_resource type="BoxShape" id=4]
-extents = Vector3( 0.453354, 3, 0.911053 )
+extents = Vector3( 0.255302, 2.5773, 1.5073 )
 
-[sub_resource type="BoxShape" id=5]
+[sub_resource type="CubeMesh" id=5]
 
-[sub_resource type="CubeMesh" id=6]
-
-[sub_resource type="CubeMesh" id=10]
-
-[sub_resource type="BoxShape" id=11]
+[sub_resource type="BoxShape" id=6]
 
 [sub_resource type="BoxShape" id=7]
 
@@ -30,9 +34,9 @@ albedo_color = Color( 0.137255, 0.658824, 0, 0.294118 )
 [sub_resource type="CubeMesh" id=9]
 material = SubResource( 8 )
 
-[sub_resource type="CubeMesh" id=12]
+[sub_resource type="CubeMesh" id=10]
 
-[sub_resource type="SpatialMaterial" id=13]
+[sub_resource type="SpatialMaterial" id=11]
 flags_transparent = true
 albedo_color = Color( 0, 0.403922, 0.658824, 0.294118 )
 
@@ -61,7 +65,7 @@ __meta__ = {
 
 [node name="CollisionShape" type="CollisionShape" parent="Player"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.808599, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="penguin_rotator" type="Spatial" parent="Player"]
 transform = Transform( -1, 0, -8.74228e-08, 0, 0.999999, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
@@ -84,7 +88,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape" type="CollisionShape" parent="Player/Hands"]
-shape = SubResource( 4 )
+shape = SubResource( 2 )
 
 [node name="RayCast" type="RayCast" parent="Player"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.49257, 0 )
@@ -96,23 +100,240 @@ current = true
 far = 1000.0
 script = ExtResource( 4 )
 
-[node name="Reward" type="RigidBody" parent="." groups=[
+[node name="RewardUkelele" type="RigidBody" parent="." groups=[
 "Reward",
 ]]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -45 )
+transform = Transform( 0.438802, -0.157707, 0.884636, 0.709147, 0.665403, -0.233132, -0.551873, 0.729635, 0.403817, 0.0634174, 3, -44.4617 )
 collision_layer = 3
 mass = 0.5
 gravity_scale = 2.0
+can_sleep = false
 __meta__ = {
 "respawn_point": Vector3( 0, 3, -45 )
 }
 
-[node name="CollisionShape" type="CollisionShape" parent="Reward"]
-shape = SubResource( 5 )
+[node name="CollisionShape" type="CollisionShape" parent="RewardUkelele"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
 
-[node name="MeshInstance" type="MeshInstance" parent="Reward"]
-mesh = SubResource( 6 )
-material/0 = null
+[node name="guitar" parent="RewardUkelele" instance=ExtResource( 6 )]
+
+[node name="Reward2" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( -0.269873, 0.247302, -0.930597, 0.675603, 0.737266, 0, 0.686097, -0.628714, -0.366046, 2.92753, 1.48269, -46.7284 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Reward2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
+
+[node name="guitar" parent="Reward2" instance=ExtResource( 6 )]
+
+[node name="Reward3" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( 0.485496, -0.652669, 0.58165, 0.874239, 0.362451, -0.323011, 0, 0.665322, 0.746557, 2.22525, 1.70867, -49.2359 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Reward3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
+
+[node name="guitar" parent="Reward3" instance=ExtResource( 6 )]
+
+[node name="Reward4" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( 0.692093, -0.302352, -0.655432, 0, 0.908041, -0.418882, 0.721809, 0.289905, 0.628448, -1.70196, 4.92545, -49.6094 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Reward4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
+
+[node name="guitar" parent="Reward4" instance=ExtResource( 6 )]
+
+[node name="Reward5" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( -0.761498, -0.280491, 0.584334, 0.643676, -0.221301, 0.732603, -0.0761752, 0.933997, 0.349065, 12.4314, 3.77704, -44.94 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Reward5"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
+
+[node name="guitar" parent="Reward5" instance=ExtResource( 6 )]
+
+[node name="Reward6" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( -0.334416, -0.863932, -0.376547, -0.318563, 0.479658, -0.817585, 0.886952, -0.15346, -0.435622, 13.3584, 6.90541, -47.3068 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Reward6"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
+
+[node name="guitar" parent="Reward6" instance=ExtResource( 6 )]
+
+[node name="Reward7" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( -0.64415, -0.160483, 0.747875, 0.589721, -0.726883, 0.351952, 0.487135, 0.667748, 0.562862, 11.8717, 6.81248, -49.4546 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Reward7"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
+
+[node name="guitar" parent="Reward7" instance=ExtResource( 6 )]
+
+[node name="Reward8" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( 0.483051, -0.721258, 0.496435, 0.508753, -0.230244, -0.829553, 0.712623, 0.653279, 0.255722, 8.03578, 3.54877, -48.7168 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Reward8"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
+
+[node name="guitar" parent="Reward8" instance=ExtResource( 6 )]
+
+[node name="Reward9" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( -0.761498, -0.280491, 0.584334, 0.643676, -0.221301, 0.732603, -0.0761752, 0.933997, 0.349065, 7.01032, 7.27909, -44.94 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Reward9"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
+
+[node name="guitar" parent="Reward9" instance=ExtResource( 6 )]
+
+[node name="Reward10" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( -0.334416, -0.863932, -0.376547, -0.318563, 0.479658, -0.817585, 0.886952, -0.15346, -0.435622, 7.93725, 10.4075, -47.3068 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Reward10"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
+
+[node name="guitar" parent="Reward10" instance=ExtResource( 6 )]
+
+[node name="Reward11" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( -0.64415, -0.160483, 0.747875, 0.589721, -0.726883, 0.351952, 0.487135, 0.667748, 0.562862, 6.45054, 10.3145, -49.4546 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Reward11"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
+
+[node name="guitar" parent="Reward11" instance=ExtResource( 6 )]
+
+[node name="Reward12" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( 0.483051, -0.721258, 0.496435, 0.508753, -0.230244, -0.829553, 0.712623, 0.653279, 0.255722, 2.61466, 7.05081, -48.7168 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="Reward12"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.27675, 0 )
+shape = SubResource( 3 )
+
+[node name="guitar" parent="Reward12" instance=ExtResource( 6 )]
+
+[node name="RewardPhone" type="RigidBody" parent="." groups=[
+"Reward",
+]]
+transform = Transform( 0.346671, 0.908575, 0.233046, -0.92264, 0.375066, -0.0897817, -0.168981, -0.183892, 0.968312, 2.61466, 7.05081, -28.0788 )
+collision_layer = 3
+mass = 0.5
+gravity_scale = 2.0
+can_sleep = false
+__meta__ = {
+"respawn_point": Vector3( 0, 3, -45 )
+}
+
+[node name="CollisionShape" type="CollisionShape" parent="RewardPhone"]
+transform = Transform( 0.999999, 0, 2.98023e-08, -5.96046e-08, 1, -1.49012e-08, 2.98023e-08, 2.98023e-08, 0.999999, 0.806993, 1.55123, -0.463713 )
+shape = SubResource( 4 )
+
+[node name="phone" parent="RewardPhone" instance=ExtResource( 7 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
@@ -149,44 +370,45 @@ text = "0"
 [node name="Spatial" type="Spatial" parent="."]
 
 [node name="StaticBody2" type="StaticBody" parent="Spatial"]
-transform = Transform( 6, 0, 0, 0, 8.31937, 0, 0, 0, 6, 1.56698, 7.49743, 0 )
+transform = Transform( 6, 0, 0, 0, 8.31937, 0, 0, 0, 6, 1.567, 7.497, 11 )
 
 [node name="MeshInstance" type="MeshInstance" parent="Spatial/StaticBody2"]
-mesh = SubResource( 10 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody2"]
-shape = SubResource( 11 )
+shape = SubResource( 6 )
 
 [node name="StaticBody5" type="StaticBody" parent="Spatial"]
 transform = Transform( 12.2148, 0, 0, 0, 1.47252, 0, 0, 0, 6, 19.6336, 0.99885, 11.0308 )
 
 [node name="MeshInstance" type="MeshInstance" parent="Spatial/StaticBody5"]
-mesh = SubResource( 10 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody5"]
-shape = SubResource( 11 )
+shape = SubResource( 6 )
 
 [node name="StaticBody3" type="StaticBody" parent="Spatial"]
 transform = Transform( -30, 0, -5.24537e-07, 0, -0.651, 0, -1.34607e-05, 0, 30.7944, 1, -0.719841, -22.9614 )
 
 [node name="MeshInstance" type="MeshInstance" parent="Spatial/StaticBody3"]
-mesh = SubResource( 10 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody3"]
-shape = SubResource( 11 )
+shape = SubResource( 6 )
 
 [node name="StaticBody4" type="StaticBody" parent="Spatial"]
 transform = Transform( -30, 0, -5.24537e-07, 0, -0.651, 0, -1.34607e-05, 0, 30.7944, 1, -0.719841, 43.8019 )
 
 [node name="MeshInstance" type="MeshInstance" parent="Spatial/StaticBody4"]
-mesh = SubResource( 10 )
+transform = Transform( 1, 0, 1.77636e-15, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+mesh = SubResource( 5 )
 material/0 = null
 
 [node name="CollisionShape" type="CollisionShape" parent="Spatial/StaticBody4"]
-shape = SubResource( 11 )
+shape = SubResource( 6 )
 
 [node name="Goal" type="Area" parent="Spatial"]
 transform = Transform( 5, 0, 0, 0, 4.40403, 0, 0, 0, 5, 0, 4.34322, 59.5375 )
@@ -199,7 +421,7 @@ mesh = SubResource( 9 )
 material/0 = null
 
 [node name="DeathBarrier" type="Area" parent="Spatial"]
-transform = Transform( 92.7235, 0, 0, 0, 6.9137, 0, 0, 0, 108.572, 0, -7.94819, 7.9559 )
+transform = Transform( 92.7235, 0, 0, 0, 6.9137, 0, 0, 0, 108.572, 186.818, -7.948, 7.956 )
 collision_mask = 3
 script = ExtResource( 5 )
 
@@ -207,8 +429,85 @@ script = ExtResource( 5 )
 shape = SubResource( 7 )
 
 [node name="MeshInstance" type="MeshInstance" parent="Spatial/DeathBarrier"]
-mesh = SubResource( 12 )
-material/0 = SubResource( 13 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0161835, 0, 0 )
+mesh = SubResource( 10 )
+material/0 = SubResource( 11 )
+
+[node name="DeathBarrier2" type="Area" parent="Spatial"]
+transform = Transform( 92.7235, 0, 0, 0, 6.9137, 0, 0, 0, 108.572, -1.7991, -7.948, -212.815 )
+collision_mask = 3
+script = ExtResource( 5 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/DeathBarrier2"]
+shape = SubResource( 7 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Spatial/DeathBarrier2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.036262 )
+mesh = SubResource( 10 )
+material/0 = SubResource( 11 )
+
+[node name="DeathBarrier4" type="Area" parent="Spatial"]
+transform = Transform( 92.7235, 0, 0, 0, 6.9137, 0, 0, 0, 108.572, -1.7991, -7.948, 228.79 )
+collision_mask = 3
+script = ExtResource( 5 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/DeathBarrier4"]
+shape = SubResource( 7 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Spatial/DeathBarrier4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.152469 )
+mesh = SubResource( 10 )
+material/0 = SubResource( 11 )
+
+[node name="MeshInstance2" type="MeshInstance" parent="Spatial/DeathBarrier4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.97801, 0, -0.152469 )
+mesh = SubResource( 10 )
+material/0 = SubResource( 11 )
+
+[node name="MeshInstance3" type="MeshInstance" parent="Spatial/DeathBarrier4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.99002, 0, -0.152469 )
+mesh = SubResource( 10 )
+material/0 = SubResource( 11 )
+
+[node name="MeshInstance4" type="MeshInstance" parent="Spatial/DeathBarrier4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.99002, 0, -4.0163 )
+mesh = SubResource( 10 )
+material/0 = SubResource( 11 )
+
+[node name="MeshInstance5" type="MeshInstance" parent="Spatial/DeathBarrier4"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.94897, 0, -4.0163 )
+mesh = SubResource( 10 )
+material/0 = SubResource( 11 )
+
+[node name="DeathBarrier3" type="Area" parent="Spatial"]
+transform = Transform( 92.7235, 0, 0, 0, 6.9137, 0, 0, 0, 108.572, -188.668, -7.948, 7.956 )
+collision_mask = 3
+script = ExtResource( 5 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/DeathBarrier3"]
+shape = SubResource( 7 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Spatial/DeathBarrier3"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0569079, 0, 0 )
+mesh = SubResource( 10 )
+material/0 = SubResource( 11 )
+
+[node name="Water" type="Area" parent="Spatial"]
+transform = Transform( 92.7235, 0, 0, 0, 6.9137, 0, 0, 0, 108.572, 0, -7.94819, 7.9559 )
+space_override = 1
+gravity_vec = Vector3( 0, 1, 0 )
+gravity = 19.28
+collision_mask = 3
+
+[node name="CollisionShape" type="CollisionShape" parent="Spatial/Water"]
+shape = SubResource( 7 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Spatial/Water"]
+mesh = SubResource( 10 )
+material/0 = SubResource( 11 )
 
 [connection signal="body_entered" from="Spatial/Goal" to="." method="_on_Goal_body_entered"]
 [connection signal="body_entered" from="Spatial/DeathBarrier" to="Spatial/DeathBarrier" method="_on_DeathBarrier_body_entered"]
+[connection signal="body_entered" from="Spatial/DeathBarrier2" to="Spatial/DeathBarrier2" method="_on_DeathBarrier_body_entered"]
+[connection signal="body_entered" from="Spatial/DeathBarrier4" to="Spatial/DeathBarrier4" method="_on_DeathBarrier_body_entered"]
+[connection signal="body_entered" from="Spatial/DeathBarrier3" to="Spatial/DeathBarrier3" method="_on_DeathBarrier_body_entered"]

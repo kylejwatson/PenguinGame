@@ -21,7 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="PenguinGame"
-run/main_scene="res://Scen1.tscn"
+run/main_scene="res://Menu.tscn"
 config/icon="res://icon.png"
 
 [editor_plugins]
